@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Rpwebdevelopment\LaravelBlueshift\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelBlueshiftCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-blueshift';
 
     public $description = 'My command';
 
