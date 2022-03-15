@@ -6,9 +6,9 @@ namespace Rpwebdevelopment\LaravelBlueshift\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Rpwebdevelopment\LaravelBlueshift\MainServiceProvider;
 use Rpwebdevelopment\LaravelBlueshift\ServiceProviders\ApiServiceProvider;
 use Rpwebdevelopment\LaravelBlueshift\ServiceProviders\BlueshiftServiceProvider;
-use Rpwebdevelopment\LaravelBlueshift\MainServiceProvider;
 
 class TestCase extends Orchestra
 {

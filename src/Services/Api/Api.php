@@ -6,15 +6,16 @@ namespace Rpwebdevelopment\LaravelBlueshift\Services\Api;
 
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\CurlException;
 
-class Api {
+class Api
+{
     protected int $_timeout = 30;
     protected bool $_verify_ssl = true;
     protected int $_verify_host = 2;
-    /** @var int|bool $curlErrno */
+    /** @var int|bool */
     protected $curlErrno = false;
-    /** @var string|bool $curlError */
+    /** @var string|bool */
     protected $curlError = false;
-    /** @var string|bool $response */
+    /** @var string|bool */
     protected $response = false;
     protected array $request = [];
     protected array $headers = [];
@@ -22,8 +23,8 @@ class Api {
 
     public function __construct(string $authToken, array $headers = [])
     {
-        if (!function_exists('curl_init')) {
-            throw new CurlException ("cURL is not available. This API wrapper cannot be used.");
+        if (! function_exists('curl_init')) {
+            throw new CurlException("cURL is not available. This API wrapper cannot be used.");
         }
         $headers[] = 'Authorization: Basic ' . $authToken;
         $this->headers = $headers;
@@ -52,22 +53,25 @@ class Api {
             case 'DELETE':
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
                 break;
             case 'POST':
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+
                 break;
             case 'GET':
                 curl_setopt($ch, CURLOPT_HTTPGET, true);
-                if (!empty($params)) {
+                if (! empty($params)) {
                     $url .= '?' . http_build_query($params);
                     curl_setopt($ch, CURLOPT_URL, $url);
                 }
+
                 break;
         }
 
         $this->request['method'] = strtoupper($method);
-        if (!empty($headers)) {
+        if (! empty($headers)) {
             $this->headers = array_merge($this->headers, $headers);
         }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -79,38 +83,41 @@ class Api {
             $this->curlErrno = curl_errno($ch);
             $this->curlError = curl_error($ch);
             curl_close($ch);
+
             return;
         }
         $this->curlInfo = curl_getinfo($ch);
         curl_close($ch);
+
         return new Result($this->_getBody(), $this->_getHeaders(), $this->curlInfo);
     }
 
     private function _parseHeaders($rawHeaders)
     {
-        if (!function_exists('http_parse_headers')) {
-            $headers = array();
+        if (! function_exists('http_parse_headers')) {
+            $headers = [];
             $key = '';
 
-            foreach(explode("\n", $rawHeaders) as $header) {
+            foreach (explode("\n", $rawHeaders) as $header) {
                 $header = explode(':', $header, 2);
                 if (isset($header[1])) {
-                    if (!isset($headers[$header[0]])) {
+                    if (! isset($headers[$header[0]])) {
                         $headers[$header[0]] = trim($header[1]);
                     } elseif (is_array($headers[$header[0]])) {
-                        $headers[$header[0]] = array_merge($headers[$header[0]], array(trim($header[1])));
+                        $headers[$header[0]] = array_merge($headers[$header[0]], [trim($header[1])]);
                     } else {
-                        $headers[$header[0]] = array_merge(array($headers[$header[0]]), array(trim($header[1])));
+                        $headers[$header[0]] = array_merge([$headers[$header[0]]], [trim($header[1])]);
                     }
                     $key = $header[0];
                 } else {
                     if (substr($header[0], 0, 1) == "\t") {
                         $headers[$key] .= "\r\n\t" . trim($header[0]);
-                    } elseif (!$key) {
+                    } elseif (! $key) {
                         $headers[0] = trim($header[0]);
                     }
                 }
             }
+
             return $headers;
         } else {
             return http_parse_headers($rawHeaders);
@@ -167,17 +174,17 @@ class Api {
         return $this->curlInfo;
     }
 
-    public function isCurlError ()
+    public function isCurlError()
     {
         return (bool) $this->curlErrno;
     }
 
-    public function getCurlErrno ()
+    public function getCurlErrno()
     {
         return $this->curlErrno;
     }
 
-    public function getCurlError ()
+    public function getCurlError()
     {
         return $this->curlError;
     }

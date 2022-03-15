@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Rpwebdevelopment\LaravelBlueshift\Services\Api;
 
-class Result {
+class Result
+{
     protected array $headers;
     protected array $curlInfo;
     protected array $reasonPhrases = [
@@ -69,7 +70,7 @@ class Result {
         506 => 'Variant Also Negotiates',
         507 => 'Insufficient Storage',
         508 => 'Loop Detected',
-        511 => 'Network Authentication Required'
+        511 => 'Network Authentication Required',
     ];
 
     public function __construct($body, $headers, $curlInfo)
@@ -79,12 +80,12 @@ class Result {
         $this->curlInfo = $curlInfo;
     }
 
-    public function isError ()
+    public function isError()
     {
         return isset($this->getDecodedJson()->error) && $this->getDecodedJson()->error;
     }
 
-    public function getErrorMessage ()
+    public function getErrorMessage()
     {
         return $this->getDecodedJson()->message;
     }

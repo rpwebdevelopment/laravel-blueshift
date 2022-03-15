@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rpwebdevelopment\LaravelBlueshift\Services;
 
-use Rpwebdevelopment\LaravelBlueshift\Services\Api\Api;
-use Rpwebdevelopment\LaravelBlueshift\Services\Api\Result;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftClientError;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftError;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftServerError;
+use Rpwebdevelopment\LaravelBlueshift\Services\Api\Api;
+use Rpwebdevelopment\LaravelBlueshift\Services\Api\Result;
 
 abstract class Blueshift
 {
