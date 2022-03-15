@@ -19,24 +19,52 @@ abstract class Blueshift
         $this->api = $api;
     }
 
-    protected function handleResponse(Result $response): string
+    protected function handleResponse(Result $result): string
     {
-        if ($response->isOk()) {
-            return $response->getBody();
+        if ($result->isOk()) {
+            return $this->getResponse($result);
         }
 
-        if ($response->isServerError()) {
-            throw new BlueshiftServerError($response->getErrorMessage(), $response->getResponseCode());
+        if ($result->isServerError()) {
+            throw new BlueshiftServerError($this->getErrorMessage($result), $result->getResponseCode());
         }
 
-        if ($response->isClientError()) {
-            throw new BlueshiftClientError($response->getErrorMessage(), $response->getResponseCode());
+        if ($result->isClientError()) {
+            throw new BlueshiftClientError($this->getErrorMessage($result), $result->getResponseCode());
         }
 
-        if ($response->isError()) {
-            throw new BlueshiftError($response->getErrorMessage(), $response->getResponseCode());
+        if ($result->isError()) {
+            throw new BlueshiftError($this->getErrorMessage($result), $result->getResponseCode());
         }
 
-        throw new BlueshiftError($response->getErrorMessage(), $response->getResponseCode());
+        throw new BlueshiftError($this->getErrorMessage($result), $result->getResponseCode());
+    }
+
+    private function getResponse(Result $result)
+    {
+        if (method_exists($result, 'getBody')) {
+            return $result->getBody();
+        }
+
+        if (method_exists($result, 'getResponse')) {
+            return $result->getResponse();
+        }
+    }
+
+    private function getErrorMessage(Result $result)
+    {
+        if (method_exists($result, 'getErorrMessage')) {
+            return $result->getErrorMessage();
+        }
+
+        if (method_exists($result, 'getBody')) {
+            return $result->getBody();
+        }
+
+        if (method_exists($result, 'getResponse')) {
+            return $result->getResponse();
+        }
+
+        return 'An error has occurred';
     }
 }
