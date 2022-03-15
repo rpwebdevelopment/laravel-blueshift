@@ -6,7 +6,6 @@ namespace Rpwebdevelopment\LaravelBlueshift\Services;
 
 use PHPLicengine\Api\Api;
 use PHPLicengine\Api\Result;
-use function PHPUnit\Framework\throwException;
 
 abstract class Blueshift
 {

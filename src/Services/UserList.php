@@ -24,9 +24,10 @@ class UserList extends Blueshift implements BlueshiftUserList
                         'description' => $description,
                         'source' => $source,
                     ]
-                )
+                ),
             ]
         );
+
         return $this->handleResponse($response);
     }
 
@@ -37,6 +38,7 @@ class UserList extends Blueshift implements BlueshiftUserList
             $this->baseUrl . '/add_user_to_list/' . $listId,
             $this->getUserListParams($identifierKey, $identifierValue)
         );
+
         return $this->handleResponse($response);
     }
 
@@ -47,12 +49,13 @@ class UserList extends Blueshift implements BlueshiftUserList
             $this->baseUrl . '/remove_user_from_list/' . $listId,
             $this->getUserListParams($identifierKey, $identifierValue)
         );
+
         return $this->handleResponse($response);
     }
 
     private function validateIdentifier(string $key): void
     {
-        if (!in_array($key, $this->identifiers)) {
+        if (! in_array($key, $this->identifiers)) {
             throw new Exception('Identifier key must be either "customer_id" or "email"');
         }
     }
@@ -63,9 +66,9 @@ class UserList extends Blueshift implements BlueshiftUserList
             'body' => json_encode(
                 [
                     'identifier_key' => $identifierKey,
-                    'identifier_value' => $identifierValue
+                    'identifier_value' => $identifierValue,
                 ]
-            )
+            ),
         ];
     }
 }

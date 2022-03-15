@@ -14,18 +14,21 @@ class Customer extends Blueshift implements BlueshiftCustomer
     public function search(string $email): ?string
     {
         $response = $this->api->get($this->baseUrl, ['email' => $email]);
+
         return $this->handleResponse($response);
     }
 
     public function get(string $uuid): ?string
     {
         $response = $this->api->get($this->baseUrl . '/' . $uuid);
+
         return $this->handleResponse($response);
     }
 
     public function createJson(string $customer): ?string
     {
         $response = $this->api->post($this->baseUrl, ['body' => $customer]);
+
         return $this->handleResponse($response);
     }
 
@@ -37,12 +40,14 @@ class Customer extends Blueshift implements BlueshiftCustomer
     public function bulkCreateJson(string $customers): ?string
     {
         $response = $this->api->post($this->baseUrl . '/bulk', ['body' => $customers]);
+
         return $this->handleResponse($response);
     }
 
     public function bulkCreateArray(array $customers): ?string
     {
         $json = json_encode(['customers' => $customers]);
+
         return $this->createJson($json);
     }
 
@@ -55,6 +60,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
 
         $json = json_encode($search);
         $response = $this->api->post($this->baseUrl . '/unforget', ['body' => $json]);
+
         return $this->handleResponse($response);
     }
 
@@ -67,6 +73,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
 
         $json = json_encode($search);
         $response = $this->api->post($this->baseUrl . '/forget', ['body' => $json]);
+
         return $this->handleResponse($response);
     }
 
@@ -83,6 +90,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
             $this->baseUrl . '/delete?delete_all_matching_customers=' . $matching,
             ['body' => $json]
         );
+
         return $this->handleResponse($response);
     }
 

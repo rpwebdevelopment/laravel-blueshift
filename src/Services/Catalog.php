@@ -23,12 +23,14 @@ class Catalog extends Blueshift implements BlueshiftCatalog
     public function createCatalog(string $name): string
     {
         $response = $this->api->post($this->baseUrl, ['body' => json_encode(['catalog' => ['name' => $name]])]);
+
         return $this->handleResponse($response);
     }
 
     public function getList(): string
     {
         $response = $this->api->get($this->baseUrl);
+
         return $this->handleResponse($response);
     }
 
@@ -50,6 +52,7 @@ class Catalog extends Blueshift implements BlueshiftCatalog
     public function getCatalog(string $uuid): string
     {
         $response = $this->api->get($this->baseUrl . '/' . $uuid . '.json');
+
         return $this->handleResponse($response);
     }
 
@@ -60,11 +63,11 @@ class Catalog extends Blueshift implements BlueshiftCatalog
             throw new Exception('Missing required item field');
         }
 
-        if (!is_array($item['category'])) {
+        if (! is_array($item['category'])) {
             throw new Exception('Item category must be of type array');
         }
 
-        if (!in_array($item['availability'], $this->availabilityOptions)) {
+        if (! in_array($item['availability'], $this->availabilityOptions)) {
             throw new Exception('Availability must be either "in stock" or "out of stock"');
         }
 
