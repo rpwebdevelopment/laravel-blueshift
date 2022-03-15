@@ -2,6 +2,6 @@
 
 All notable changes to `laravel-blueshift` will be documented in this file.
 
-## 1.0.0 - 202X-XX-XX
+## 0.0.5 - 2022-03-15
 
-- initial release
+- initial in progress release

@@ -1,6 +1,4 @@
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
-
 # Blueshift integration package for laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rpwebdevelopment/laravel-blueshift.svg?style=flat-square)](https://packagist.org/packages/rpwebdevelopment/laravel-blueshift)
@@ -8,15 +6,11 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rpwebdevelopment/laravel-blueshift/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rpwebdevelopment/laravel-blueshift/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/rpwebdevelopment/laravel-blueshift.svg?style=flat-square)](https://packagist.org/packages/rpwebdevelopment/laravel-blueshift)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This is a Laravel specific package designed to make communication with the [Blueshift API](https://developer.blueshift.com/reference/welcome) quick and easy.
 
-## Support us
+## Requirements
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-blueshift.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-blueshift)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Currently this package only functions on Laravel 8.*
 
 ## Installation
 
@@ -26,37 +20,39 @@ You can install the package via composer:
 composer require rpwebdevelopment/laravel-blueshift
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="laravel-blueshift-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-blueshift-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-blueshift-views"
-```
-
 ## Usage
 
+laravel-blueshift provides specific classes for handling different API endpoints, the available classes and their methods are as follows:
+
+- BlueshiftCustomer
+    - search(string $email);
+    - get(string $uuid); 
+    - createJson(string $customer);
+    - createArray(array $customer);
+    - bulkCreateJson(string $customers);
+    - bulkCreateArray(array $customers);
+    - startTracking(?string $email, ?string $uuid);
+    - stopTracking(?string $email, ?string $uuid);
+    - delete(?string $email, ?string $uuid, bool $allMatching)
+- BlueshiftCatalog
+    - createCatalog(string $name);
+    - getList();
+    - addItems(string $uuid, array $items);
+    - getCatalog(string $uuid);
+- BlueshiftUserList
+    - createList(string $name, string $description, string $source = 'email');
+    - addUserToList(int $listId, string $identifierKey, string $identifierValue);
+    - removeUserFromList(int $listId, string $identifierKey, string $identifierValue);
+- BlueshiftEvent
+    - sendEvent(array $event);
+      
+From your laravel application these methods can be called as follows:
 ```php
-$laravelBlueshift = new Rpwebdevelopment\LaravelBlueshift();
-echo $laravelBlueshift->echoPhrase('Hello, Rpwebdevelopment!');
+try {
+    $customer = app(BlueshiftCustomer::class);
+    $customer->search('email_address@example.org');
+} catch (\Exception $e) {
+}
 ```
 
 ## Testing
@@ -69,18 +65,9 @@ composer test
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
 - [Rich Porter](https://github.com/rpwebdevelopment)
-- [All Contributors](../../contributors)
 
 ## License
 
