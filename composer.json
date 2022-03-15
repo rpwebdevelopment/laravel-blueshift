@@ -45,7 +45,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
+        "test": "vendor/bin/phpunit"
     },
     "config": {
         "sort-packages": true,
@@ -59,10 +59,7 @@
             "providers": [
                 "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\ApiServiceProvider",
                 "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\BlueshiftServiceProvider"
-            ],
-            "aliases": {
-                "LaravelBlueshift": "Rpwebdevelopment\\LaravelBlueshift\\Facades\\LaravelBlueshift"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
