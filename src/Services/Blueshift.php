@@ -29,7 +29,7 @@ abstract class Blueshift
             throw new BlueshiftServerError($response->getErrorMessage(), $response->getResponseCode());
         }
 
-        if($response->isClientError()) {
+        if ($response->isClientError()) {
             throw new BlueshiftClientError($response->getErrorMessage(), $response->getResponseCode());
         }
 
