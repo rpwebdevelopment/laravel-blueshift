@@ -49,8 +49,7 @@ laravel-blueshift provides specific classes for handling different API endpoints
 From your laravel application these methods can be called as follows:
 ```php
 try {
-    $customer = app(BlueshiftCustomer::class);
-    $customer->search('email_address@example.org');
+    $customer = app(BlueshiftCustomer::class)->search('email_address@example.org');
 } catch (\Exception $e) {
 }
 ```
