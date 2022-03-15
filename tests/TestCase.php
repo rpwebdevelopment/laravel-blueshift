@@ -6,7 +6,7 @@ namespace Rpwebdevelopment\LaravelBlueshift\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Rpwebdevelopment\LaravelBlueshift\LaravelBlueshiftServiceProvider;
+use Rpwebdevelopment\LaravelBlueshift\ServiceProviders\BlueshiftServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -22,7 +22,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            LaravelBlueshiftServiceProvider::class,
+            BlueshiftServiceProvider::class,
         ];
     }
 
