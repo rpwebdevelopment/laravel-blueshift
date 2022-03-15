@@ -1,24 +1,28 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "rpwebdevelopment/laravel-blueshift",
+    "description": "Blueshift integration package for laravel",
     "keywords": [
-        ":vendor_name",
+        "rpwebdevelopment",
         "laravel",
-        ":package_slug"
+        "laravel-blueshift"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/rpwebdevelopment/laravel-blueshift",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Rich Porter",
+            "email": "rich.porter@carandclassic.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^7.4|^8.0",
+        "ext-curl": "*",
+        "guzzlehttp/guzzle": "^7.0",
+        "illuminate/contracts": "^9.0",
+        "phplicengine/phplicengine-api": "^2.2",
         "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^9.0"
+        "ext-json": "*"
     },
     "require-dev": {
         "nunomaduro/collision": "^6.0",
@@ -34,13 +38,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Rpwebdevelopment\\LaravelBlueshift\\": "src",
+            "Rpwebdevelopment\\LaravelBlueshift\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Rpwebdevelopment\\LaravelBlueshift\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -49,15 +53,20 @@
         "test-coverage": "vendor/bin/pest --coverage"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": false,
+            "phpstan/extension-installer": false
+        }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\ApiServiceProvider",
+                "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\BlueshiftServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelBlueshift": "Rpwebdevelopment\\LaravelBlueshift\\Facades\\LaravelBlueshift"
             }
         }
     },
