@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Rpwebdevelopment\LaravelBlueshift\ServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
-use PHPLicengine\Api\Api;
+
 use Rpwebdevelopment\LaravelBlueshift\Contracts\ApiInterface;
+use Rpwebdevelopment\LaravelBlueshift\Services\Api\Api;
 
 class ApiServiceProvider extends ServiceProvider
 {
@@ -16,20 +17,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->app->bind(
             Api::class,
             static function (): Api {
-                $curlOptions = (array)config()->get('blueshift.provider.curl_options', []);
-                $bitlyApi = new Api(config('blueshift.provider.api_key'));
-                if (! empty($curlOptions)) {
-                    $bitlyApi->setCurlCallback(
-                    /** @param resource $ch */
-                        static function ($ch) use ($curlOptions): void {
-                            foreach ($curlOptions as $curlOption => $optionValue) {
-                                curl_setopt($ch, $curlOption, $optionValue);
-                            }
-                        }
-                    );
-                }
-
-                return $bitlyApi;
+                return new Api(
+                    config('blueshift.provider.api_key'),
+                    config('blueshift.provider.headers')
+                );
             }
         );
     }

@@ -16,11 +16,10 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.0",
         "illuminate/contracts": "^8.53",
-        "phplicengine/phplicengine-api": "^2.2",
         "spatie/laravel-package-tools": "^1.9.2",
         "ext-json": "*"
     },
@@ -51,12 +50,14 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": false,
-            "phpstan/extension-installer": false
+            "phpstan/extension-installer": false,
+            "dealerdirect/phpcodesniffer-composer-installer": false
         }
     },
     "extra": {
         "laravel": {
             "providers": [
+                "Rpwebdevelopment\\LaravelBlueshift\\MainServiceProvider",
                 "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\ApiServiceProvider",
                 "Rpwebdevelopment\\LaravelBlueshift\\ServiceProviders\\BlueshiftServiceProvider"
             ]
