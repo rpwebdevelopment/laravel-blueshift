@@ -24,22 +24,14 @@ class Catalog extends Blueshift implements BlueshiftCatalog
     {
         $response = $this->api->post($this->baseUrl, ['body' => json_encode(['catalog' => ['name' => $name]])]);
 
-        try {
-            return $this->handleResponse($response);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        return $this->handleResponse($response);
     }
 
     public function getList(): string
     {
         $response = $this->api->get($this->baseUrl);
 
-        try {
-            return $this->handleResponse($response);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        return $this->handleResponse($response);
     }
 
     public function addItems(string $uuid, array $items): string
@@ -54,22 +46,14 @@ class Catalog extends Blueshift implements BlueshiftCatalog
             ['body' => json_encode(['catalog' => ['products' => $products]])]
         );
 
-        try {
-            return $this->handleResponse($response);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        return $this->handleResponse($response);
     }
 
     public function getCatalog(string $uuid): string
     {
         $response = $this->api->get($this->baseUrl . '/' . $uuid . '.json');
 
-        try {
-            return $this->handleResponse($response);
-        } catch (Exception $e) {
-            throw $e;
-        }
+        return $this->handleResponse($response);
     }
 
     private function validateItem(array $item): ?array

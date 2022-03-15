@@ -6,6 +6,9 @@ namespace Rpwebdevelopment\LaravelBlueshift\Services;
 
 use PHPLicengine\Api\Api;
 use PHPLicengine\Api\Result;
+use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftClientError;
+use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftError;
+use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftServerError;
 
 abstract class Blueshift
 {
@@ -23,13 +26,17 @@ abstract class Blueshift
         }
 
         if ($response->isServerError()) {
-            throw new \Exception('Blueshift server error');
+            throw new BlueshiftServerError($response->getErrorMessage(), $response->getResponseCode());
+        }
+
+        if($response->isClientError()) {
+            throw new BlueshiftClientError($response->getErrorMessage(), $response->getResponseCode());
         }
 
         if ($response->isError()) {
-            throw new \Exception($response->getErrorMessage());
+            throw new BlueshiftError($response->getErrorMessage(), $response->getResponseCode());
         }
 
-        throw new \Exception('An unexpected error has occurred');
+        throw new BlueshiftError($response->getErrorMessage(), $response->getResponseCode());
     }
 }
