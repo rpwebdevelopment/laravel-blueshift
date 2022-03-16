@@ -9,25 +9,25 @@ use Rpwebdevelopment\LaravelBlueshift\Contracts\BlueshiftCustomer;
 
 class Customer extends Blueshift implements BlueshiftCustomer
 {
-    private string $baseUrl = 'https://api.getblueshift.com/api/v1/customers';
+    private string $ext = '/api/v1/customers';
 
     public function search(string $email): ?string
     {
-        $response = $this->api->get($this->baseUrl, ['email' => $email]);
+        $response = $this->api->get($this->ext, ['email' => $email]);
 
         return $this->handleResponse($response);
     }
 
     public function get(string $uuid): ?string
     {
-        $response = $this->api->get($this->baseUrl . '/' . $uuid);
+        $response = $this->api->get($this->ext . '/' . $uuid);
 
         return $this->handleResponse($response);
     }
 
     public function createJson(string $customer): ?string
     {
-        $response = $this->api->post($this->baseUrl, ['body' => $customer]);
+        $response = $this->api->post($this->ext, ['body' => $customer]);
 
         return $this->handleResponse($response);
     }
@@ -39,7 +39,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
 
     public function bulkCreateJson(string $customers): ?string
     {
-        $response = $this->api->post($this->baseUrl . '/bulk', ['body' => $customers]);
+        $response = $this->api->post($this->ext . '/bulk', ['body' => $customers]);
 
         return $this->handleResponse($response);
     }
@@ -59,7 +59,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
         }
 
         $json = json_encode($search);
-        $response = $this->api->post($this->baseUrl . '/unforget', ['body' => $json]);
+        $response = $this->api->post($this->ext . '/unforget', ['body' => $json]);
 
         return $this->handleResponse($response);
     }
@@ -72,7 +72,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
         }
 
         $json = json_encode($search);
-        $response = $this->api->post($this->baseUrl . '/forget', ['body' => $json]);
+        $response = $this->api->post($this->ext . '/forget', ['body' => $json]);
 
         return $this->handleResponse($response);
     }
@@ -87,7 +87,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
         $matching = $allMatching ? 'true' : 'false';
         $json = json_encode($search);
         $response = $this->api->post(
-            $this->baseUrl . '/delete?delete_all_matching_customers=' . $matching,
+            $this->ext . '/delete?delete_all_matching_customers=' . $matching,
             ['body' => $json]
         );
 

@@ -18,6 +18,7 @@ class ApiServiceProvider extends ServiceProvider
             Api::class,
             static function (): Api {
                 return new Api(
+                    config('blueshift.provider.base_url'),
                     config('blueshift.provider.api_key'),
                     config('blueshift.provider.headers')
                 );

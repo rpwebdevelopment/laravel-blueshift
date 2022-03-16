@@ -8,6 +8,7 @@ use Rpwebdevelopment\LaravelBlueshift\Exceptions\CurlException;
 
 class Api
 {
+    protected string $baseUrl;
     protected int $_timeout = 30;
     protected bool $_verify_ssl = true;
     protected int $_verify_host = 2;
@@ -21,12 +22,13 @@ class Api
     protected array $headers = [];
     protected array $curlInfo;
 
-    public function __construct(string $authToken, array $headers = [])
+    public function __construct(string $baseUrl, string $authToken, array $headers = [])
     {
         if (! function_exists('curl_init')) {
             throw new CurlException("cURL is not available. This API wrapper cannot be used.");
         }
-        $headers[] = 'Authorization: Basic ' . $authToken;
+        $headers[] = 'Authorization: Basic ' . base64_encode($authToken);
+        $this->baseUrl = $baseUrl;
         $this->headers = $headers;
     }
 
@@ -37,6 +39,7 @@ class Api
 
     private function _call($url, $params = null, $headers = null, $method = "GET")
     {
+        $url = $this->baseUrl . $url;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);

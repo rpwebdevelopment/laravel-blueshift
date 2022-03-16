@@ -9,7 +9,7 @@ use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftValidationException;
 
 class Catalog extends Blueshift implements BlueshiftCatalog
 {
-    private string $baseUrl = 'https://api.getblueshift.com/api/v1/catalogs';
+    private string $ext = '/api/v1/catalogs';
     private array $availabilityOptions = ['in stock', 'out of stock'];
     private array $requiredKeys = [
         'category',
@@ -22,14 +22,14 @@ class Catalog extends Blueshift implements BlueshiftCatalog
 
     public function createCatalog(string $name): string
     {
-        $response = $this->api->post($this->baseUrl, ['body' => json_encode(['catalog' => ['name' => $name]])]);
+        $response = $this->api->post($this->ext, ['body' => json_encode(['catalog' => ['name' => $name]])]);
 
         return $this->handleResponse($response);
     }
 
     public function getList(): string
     {
-        $response = $this->api->get($this->baseUrl);
+        $response = $this->api->get($this->ext);
 
         return $this->handleResponse($response);
     }
@@ -42,7 +42,7 @@ class Catalog extends Blueshift implements BlueshiftCatalog
         }
 
         $response = $this->api->put(
-            $this->baseUrl . '/' . $uuid . '.json',
+            $this->ext . '/' . $uuid . '.json',
             ['body' => json_encode(['catalog' => ['products' => $products]])]
         );
 
@@ -51,7 +51,7 @@ class Catalog extends Blueshift implements BlueshiftCatalog
 
     public function getCatalog(string $uuid): string
     {
-        $response = $this->api->get($this->baseUrl . '/' . $uuid . '.json');
+        $response = $this->api->get($this->ext . '/' . $uuid . '.json');
 
         return $this->handleResponse($response);
     }

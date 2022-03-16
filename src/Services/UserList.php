@@ -9,14 +9,14 @@ use Rpwebdevelopment\LaravelBlueshift\Contracts\BlueshiftUserList;
 
 class UserList extends Blueshift implements BlueshiftUserList
 {
-    private string $baseUrl = 'https://api.getblueshift.com/api/v1/custom_user_lists';
+    private string $ext = '/api/v1/custom_user_lists';
     private array $identifiers = ['customer_id', 'email'];
 
     public function createList(string $name, string $description, string $source = 'email'): string
     {
         $this->validateIdentifier($source);
         $response = $this->api->post(
-            $this->baseUrl . '/create',
+            $this->ext . '/create',
             [
                 'body' => json_encode(
                     [
@@ -35,7 +35,7 @@ class UserList extends Blueshift implements BlueshiftUserList
     {
         $this->validateIdentifier($identifierKey);
         $response = $this->api->put(
-            $this->baseUrl . '/add_user_to_list/' . $listId,
+            $this->ext . '/add_user_to_list/' . $listId,
             $this->getUserListParams($identifierKey, $identifierValue)
         );
 
@@ -46,7 +46,7 @@ class UserList extends Blueshift implements BlueshiftUserList
     {
         $this->validateIdentifier($identifierKey);
         $response = $this->api->put(
-            $this->baseUrl . '/remove_user_from_list/' . $listId,
+            $this->ext . '/remove_user_from_list/' . $listId,
             $this->getUserListParams($identifierKey, $identifierValue)
         );
 
