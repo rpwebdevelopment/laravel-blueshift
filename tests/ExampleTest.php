@@ -36,50 +36,48 @@ class ExampleTest extends TestCase
         $this->assertSame($item, $product);
     }
 
-    public function testCatalogValidateRequiresAllFields(): void
+    public function invalidItemDataProvider(): array
     {
-        $catalog = app()->make(BlueshiftCatalog::class);
-        $this->expectException(BlueshiftValidationException::class);
-        $catalog->validateItem(
-            [
-                'category' => ['cars'],
-                'image' => 'https://someurl.com/image/test.jpg',
-                'product_id' => 'ABC1234',
-                'availability' => 'in stock',
-                'title' => 'Test Product',
-            ]
-        );
+        return [
+            'missing field' => [
+                'item' => [
+                    'category' => ['cars'],
+                    'image' => 'https://someurl.com/image/test.jpg',
+                    'product_id' => 'ABC1234',
+                    'availability' => 'in stock',
+                    'title' => 'Test Product',
+                ],
+            ],
+            'invalid category type' => [
+                'item' => [
+                    'category' => 'cars',
+                    'image' => 'https://someurl.com/image/test.jpg',
+                    'product_id' => 'ABC1234',
+                    'availability' => 'in stock',
+                    'title' => 'Test Product',
+                    'web_link' => 'https://someurl.com/product/ABC1234',
+                ],
+            ],
+            'invalid availability' => [
+                'item' => [
+                    'category' => ['cars'],
+                    'image' => 'https://someurl.com/image/test.jpg',
+                    'product_id' => 'ABC1234',
+                    'availability' => 'fail',
+                    'title' => 'Test Product',
+                    'web_link' => 'https://someurl.com/product/ABC1234',
+                ],
+            ],
+        ];
     }
 
-    public function testCatalogValidateRequiresCategoryArray(): void
+    /**
+     * @dataProvider invalidItemDataProvider
+     */
+    public function testInvalidDataThrowsException(array $item): void
     {
         $catalog = app()->make(BlueshiftCatalog::class);
         $this->expectException(BlueshiftValidationException::class);
-        $catalog->validateItem(
-            [
-                'category' => 'cars',
-                'image' => 'https://someurl.com/image/test.jpg',
-                'product_id' => 'ABC1234',
-                'availability' => 'in stock',
-                'title' => 'Test Product',
-                'web_link' => 'https://someurl.com/product/ABC1234',
-            ]
-        );
-    }
-
-    public function testCatalogValidateRequiresValidAvailability(): void
-    {
-        $catalog = app()->make(BlueshiftCatalog::class);
-        $this->expectException(BlueshiftValidationException::class);
-        $catalog->validateItem(
-            [
-                'category' => ['cars'],
-                'image' => 'https://someurl.com/image/test.jpg',
-                'product_id' => 'ABC1234',
-                'availability' => 'fail',
-                'title' => 'Test Product',
-                'web_link' => 'https://someurl.com/product/ABC1234',
-            ]
-        );
+        $catalog->validateItem($item);
     }
 }
