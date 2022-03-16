@@ -30,7 +30,7 @@ class ExampleTest extends TestCase
             'product_id' => 'ABC1234',
             'availability' => 'in stock',
             'title' => 'Test Product',
-            'web_link' => 'https://someurl.com/product/ABC1234'
+            'web_link' => 'https://someurl.com/product/ABC1234',
         ];
         $item = $catalog->validateItem($product);
         $this->assertSame($item, $product);
@@ -62,7 +62,7 @@ class ExampleTest extends TestCase
                 'product_id' => 'ABC1234',
                 'availability' => 'in stock',
                 'title' => 'Test Product',
-                'web_link' => 'https://someurl.com/product/ABC1234'
+                'web_link' => 'https://someurl.com/product/ABC1234',
             ]
         );
     }
@@ -78,7 +78,7 @@ class ExampleTest extends TestCase
                 'product_id' => 'ABC1234',
                 'availability' => 'fail',
                 'title' => 'Test Product',
-                'web_link' => 'https://someurl.com/product/ABC1234'
+                'web_link' => 'https://someurl.com/product/ABC1234',
             ]
         );
     }
