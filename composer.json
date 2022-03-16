@@ -33,8 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rpwebdevelopment\\LaravelBlueshift\\": "src",
-            "Rpwebdevelopment\\LaravelBlueshift\\Database\\Factories\\": "database/factories"
+            "Rpwebdevelopment\\LaravelBlueshift\\": "src"
         }
     },
     "autoload-dev": {
