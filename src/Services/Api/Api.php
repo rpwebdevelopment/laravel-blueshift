@@ -77,7 +77,7 @@ class Api
         if (! empty($headers)) {
             $this->headers = array_merge($this->headers, $headers);
         }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
         $this->request['headers'] = $headers;
         $this->request['params'] = $params;
 
