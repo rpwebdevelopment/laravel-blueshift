@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rpwebdevelopment\LaravelBlueshift\Services;
 
-use Exception;
 use Rpwebdevelopment\LaravelBlueshift\Contracts\BlueshiftCatalog;
+use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftValidationException;
 
 class Catalog extends Blueshift implements BlueshiftCatalog
 {
@@ -56,19 +56,22 @@ class Catalog extends Blueshift implements BlueshiftCatalog
         return $this->handleResponse($response);
     }
 
-    private function validateItem(array $item): ?array
+    public function validateItem(array $item): ?array
     {
-        $required = array_filter(array_intersect_key($item, array_flip($this->requiredKeys)), 'strlen');
+        $required = array_filter(
+            array_intersect_key($item, array_flip($this->requiredKeys)),
+            fn ($v) => ((is_array($v) && count($v) > 0) || ($v !== null && $v !== ''))
+        );
         if (count($this->requiredKeys) !== count($required)) {
-            throw new Exception('Missing required item field');
+            throw BlueshiftValidationException::missingRequired();
         }
 
         if (! is_array($item['category'])) {
-            throw new Exception('Item category must be of type array');
+            throw BlueshiftValidationException::invalidCategoryType();
         }
 
         if (! in_array($item['availability'], $this->availabilityOptions)) {
-            throw new Exception('Availability must be either "in stock" or "out of stock"');
+            throw BlueshiftValidationException::invalidAvailabilityStatus();
         }
 
         return $item;
