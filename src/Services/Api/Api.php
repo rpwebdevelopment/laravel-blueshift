@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rpwebdevelopment\LaravelBlueshift\Services\Api;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\CurlException;
 
 class Api
@@ -30,6 +30,7 @@ class Api
         if (! empty($headers)) {
             $tmpHeaders = array_merge($this->headers, $headers);
         }
+
         return $tmpHeaders;
     }
 
