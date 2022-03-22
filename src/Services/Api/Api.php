@@ -54,24 +54,24 @@ class Api
     public function post(string $ext, $params = null, array $headers = []): Response
     {
         return $this->getBaseRequest($headers)
-            ->post($this->getUrl($ext), $params);
+            ->send('POST', $this->getUrl($ext), $params);
     }
 
     public function delete(string $ext, $params = null, array $headers = []): Response
     {
         return $this->getBaseRequest($headers)
-            ->delete($this->getUrl($ext), $params);
+            ->send('DELETE', $this->getUrl($ext), $params);
     }
 
     public function put(string $ext, $params = null, array $headers = []): Response
     {
         return $this->getBaseRequest($headers)
-            ->put($this->getUrl($ext), $params);
+            ->send('PUT', $this->getUrl($ext), $params);
     }
 
     public function patch(string $ext, $params = null, array $headers = []): Response
     {
         return $this->getBaseRequest($headers)
-            ->patch($this->getUrl($ext), $params);
+            ->send('PATCH', $this->getUrl($ext), $params);
     }
 }
