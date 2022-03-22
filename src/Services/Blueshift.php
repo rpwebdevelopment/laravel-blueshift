@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rpwebdevelopment\LaravelBlueshift\Services;
 
+use Illuminate\Http\Client\Response;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftClientError;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftError;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\BlueshiftServerError;
 use Rpwebdevelopment\LaravelBlueshift\Services\Api\Api;
-use Rpwebdevelopment\LaravelBlueshift\Services\Api\Result;
 
 abstract class Blueshift
 {
@@ -19,24 +19,24 @@ abstract class Blueshift
         $this->api = $api;
     }
 
-    protected function handleResponse(Result $result): string
+    protected function handleResponse(Response $response): string
     {
-        if ($result->isOk()) {
-            return $result->getBody();
+        if ($response->ok()) {
+            return $response->body();
         }
 
-        if ($result->isServerError()) {
-            throw new BlueshiftServerError($result->getErrorMessage(), $result->getResponseCode());
+        if ($response->serverError()) {
+            throw new BlueshiftServerError($response->body(), $response->status());
         }
 
-        if ($result->isClientError()) {
-            throw new BlueshiftClientError($result->getBody(), $result->getResponseCode());
+        if ($response->clientError()) {
+            throw new BlueshiftClientError($response->body(), $response->status());
         }
 
-        if ($result->isError()) {
-            throw new BlueshiftError($result->getErrorMessage(), $result->getResponseCode());
+        if ($response->failed()) {
+            throw new BlueshiftError($response->body(), $response->status());
         }
 
-        throw new BlueshiftError($result->getErrorMessage(), $result->getResponseCode());
+        throw new BlueshiftError($response->body(), $response->status());
     }
 }

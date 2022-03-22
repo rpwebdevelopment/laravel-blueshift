@@ -4,191 +4,73 @@ declare(strict_types=1);
 
 namespace Rpwebdevelopment\LaravelBlueshift\Services\Api;
 
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\Response;
 use Rpwebdevelopment\LaravelBlueshift\Exceptions\CurlException;
 
 class Api
 {
     protected string $baseUrl;
-    protected int $_timeout = 30;
-    protected bool $_verify_ssl = true;
-    protected int $_verify_host = 2;
-    /** @var int|bool */
-    protected $curlErrno = false;
-    /** @var string|bool */
-    protected $curlError = false;
-    /** @var string|bool */
-    protected $response = false;
-    protected array $request = [];
     protected array $headers = [];
-    protected array $curlInfo;
 
     public function __construct(string $baseUrl, string $authToken, array $headers = [])
     {
         if (! function_exists('curl_init')) {
             throw new CurlException("cURL is not available. This API wrapper cannot be used.");
         }
-        $headers[] = 'Authorization: Basic ' . base64_encode($authToken);
+        $headers['Authorization'] = 'Basic ' . base64_encode($authToken);
         $this->baseUrl = $baseUrl;
         $this->headers = $headers;
     }
 
-    public function setTimeout($timeout)
+    private function getHeaders(array $headers = []): array
     {
-        $this->_timeout = $timeout;
-    }
-
-    private function _call($url, $params = null, $headers = null, $method = "GET")
-    {
-        $url = $this->baseUrl . $url;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->_verify_ssl);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->_verify_host);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
-
-        switch (strtoupper($method)) {
-            case 'PUT':
-            case 'PATCH':
-            case 'DELETE':
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($method));
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-
-                break;
-            case 'POST':
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-
-                break;
-            case 'GET':
-                curl_setopt($ch, CURLOPT_HTTPGET, true);
-                if (! empty($params)) {
-                    $url .= '?' . http_build_query($params);
-                    curl_setopt($ch, CURLOPT_URL, $url);
-                }
-
-                break;
-        }
-
-        $this->request['method'] = strtoupper($method);
+        $tmpHeaders = $this->headers;
         if (! empty($headers)) {
-            $this->headers = array_merge($this->headers, $headers);
+            $tmpHeaders = array_merge($this->headers, $headers);
         }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
-        $this->request['headers'] = $headers;
-        $this->request['params'] = $params;
-
-        $this->response = curl_exec($ch);
-        if (curl_errno($ch)) {
-            $this->curlErrno = curl_errno($ch);
-            $this->curlError = curl_error($ch);
-            curl_close($ch);
-
-            return;
-        }
-        $this->curlInfo = curl_getinfo($ch);
-        curl_close($ch);
-
-        return new Result($this->_getBody(), $this->_getHeaders(), $this->curlInfo);
+        return $tmpHeaders;
     }
 
-    private function _parseHeaders($rawHeaders)
+    private function getUrl(string $ext): string
     {
-        if (! function_exists('http_parse_headers')) {
-            $headers = [];
-            $key = '';
-
-            foreach (explode("\n", $rawHeaders) as $header) {
-                $header = explode(':', $header, 2);
-                if (isset($header[1])) {
-                    if (! isset($headers[$header[0]])) {
-                        $headers[$header[0]] = trim($header[1]);
-                    } elseif (is_array($headers[$header[0]])) {
-                        $headers[$header[0]] = array_merge($headers[$header[0]], [trim($header[1])]);
-                    } else {
-                        $headers[$header[0]] = array_merge([$headers[$header[0]]], [trim($header[1])]);
-                    }
-                    $key = $header[0];
-                } else {
-                    if (substr($header[0], 0, 1) == "\t") {
-                        $headers[$key] .= "\r\n\t" . trim($header[0]);
-                    } elseif (! $key) {
-                        $headers[0] = trim($header[0]);
-                    }
-                }
-            }
-
-            return $headers;
-        } else {
-            return http_parse_headers($rawHeaders);
-        }
+        return $this->baseUrl . $ext;
     }
 
-    private function _getHeaders()
+    private function getBaseRequest(array $headers = []): PendingRequest
     {
-        return $this->_parseHeaders(substr($this->response, 0, $this->curlInfo['header_size']));
+        return Http::acceptJson()
+            ->withHeaders($this->getHeaders($headers));
     }
 
-    private function _getBody()
+    public function get(string $ext, $params = null, array $headers = []): Response
     {
-        return substr($this->response, $this->curlInfo['header_size']);
+        return $this->getBaseRequest($headers)
+            ->get($this->getUrl($ext), $params);
     }
 
-    public function getResponse()
+    public function post(string $ext, $params = null, array $headers = []): Response
     {
-        return $this->response;
+        return $this->getBaseRequest($headers)
+            ->post($this->getUrl($ext), $params);
     }
 
-    public function getRequest()
+    public function delete(string $ext, $params = null, array $headers = []): Response
     {
-        return $this->request;
+        return $this->getBaseRequest($headers)
+            ->delete($this->getUrl($ext), $params);
     }
 
-    public function get($url, $params = null, array $headers = [])
+    public function put(string $ext, $params = null, array $headers = []): Response
     {
-        return $this->_call($url, $params, $headers, $method = "GET");
+        return $this->getBaseRequest($headers)
+            ->put($this->getUrl($ext), $params);
     }
 
-    public function post($url, $params = null, array $headers = [])
+    public function patch(string $ext, $params = null, array $headers = []): Response
     {
-        return $this->_call($url, $params, $headers, $method = "POST");
-    }
-
-    public function delete($url, $params = null, array $headers = [])
-    {
-        return $this->_call($url, $params, $headers, $method = "DELETE");
-    }
-
-    public function put($url, $params = null, array $headers = [])
-    {
-        return $this->_call($url, $params, $headers, $method = "PUT");
-    }
-
-    public function patch($url, $params = null, array $headers = [])
-    {
-        return $this->_call($url, $params, $headers, $method = "PATCH");
-    }
-
-    public function getCurlInfo()
-    {
-        return $this->curlInfo;
-    }
-
-    public function isCurlError()
-    {
-        return (bool) $this->curlErrno;
-    }
-
-    public function getCurlErrno()
-    {
-        return $this->curlErrno;
-    }
-
-    public function getCurlError()
-    {
-        return $this->curlError;
+        return $this->getBaseRequest($headers)
+            ->patch($this->getUrl($ext), $params);
     }
 }
