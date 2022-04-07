@@ -36,6 +36,12 @@ laravel-blueshift provides specific classes for handling different API endpoints
     - createArray(array $customer);
     - bulkCreateJson(string $customers);
     - bulkCreateArray(array $customers);
+    - manageCustomerSubscriptions(?string $email = null, ?string $uuid = null, bool $unsubscribedEmail = false, bool $unsubscribedPush = false, bool $unsubscribedSms = false);
+    - unsubscribeCustomerFromEmail(?string $email = null, ?string $uuid = null);
+    - unsubscribeCustomerFromSms(?string $email = null, ?string $uuid = null);
+    - unsubscribeCustomerFromPush(?string $email = null, ?string $uuid = null);
+    - unsubscribeCustomerFromAll(?string $email = null, ?string $uuid = null);
+    - manageEmailListSubscriptions(array $emailList, ?bool $unsubscribedEmail = null, ?bool $unsubscribedPush = null, ?bool $unsubscribedSms = null);
     - startTracking(?string $email, ?string $uuid);
     - stopTracking(?string $email, ?string $uuid);
     - delete(?string $email, ?string $uuid, bool $allMatching)
