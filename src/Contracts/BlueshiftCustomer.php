@@ -18,6 +18,29 @@ interface BlueshiftCustomer
 
     public function bulkCreateArray(array $customers): ?string;
 
+    public function manageCustomerSubscriptions(
+        ?string $email = null,
+        ?string $uuid = null,
+        bool $unsubscribedEmail = false,
+        bool $unsubscribedPush = false,
+        bool $unsubscribedSms = false
+    ): string;
+
+    public function unsubscribeCustomerFromEmail(?string $email = null, ?string $uuid = null): string;
+
+    public function unsubscribeCustomerFromSms(?string $email = null, ?string $uuid = null): string;
+
+    public function unsubscribeCustomerFromPush(?string $email = null, ?string $uuid = null): string;
+
+    public function unsubscribeCustomerFromAll(?string $email = null, ?string $uuid = null): string;
+
+    public function manageEmailListSubscriptions(
+        array $emailList,
+        ?bool $unsubscribedEmail = null,
+        ?bool $unsubscribedPush = null,
+        ?bool $unsubscribedSms = null
+    ): string;
+
     public function startTracking(?string $email = null, ?string $uuid = null): string;
 
     public function stopTracking(?string $email = null, ?string $uuid = null): string;
