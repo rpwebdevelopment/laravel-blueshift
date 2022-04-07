@@ -91,7 +91,8 @@ class Customer extends Blueshift implements BlueshiftCustomer
         return $this->createArray($customer);
     }
 
-    public function unsubscribeCustomerFromAll(?string $email = null, ?string $uuid = null): string{
+    public function unsubscribeCustomerFromAll(?string $email = null, ?string $uuid = null): string
+    {
         return $this->manageCustomerSubscriptions($email, $uuid, true, true, true);
     }
 
@@ -105,7 +106,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
             throw BlueshiftValidationException::rateLimitExceeded();
         }
         $subscriptionStates = $this->getSubscriptionStateArray($unsubscribedEmail, $unsubscribedPush, $unsubscribedSms);
-        $mapped = array_map(fn($item) => array_merge(['email' => $item], $subscriptionStates), $emailList);
+        $mapped = array_map(fn ($item) => array_merge(['email' => $item], $subscriptionStates), $emailList);
 
         return $this->bulkCreateArray($mapped);
     }
@@ -147,11 +148,13 @@ class Customer extends Blueshift implements BlueshiftCustomer
     private function validateCustomer(?string $email = null, ?string $uuid = null): ?array
     {
         $search = [];
-        if ($email !== null)
+        if ($email !== null) {
             $search['email'] = $email;
+        }
 
-        if ($uuid !== null)
+        if ($uuid !== null) {
             $search['customer_id'] = $uuid;
+        }
 
         if (count($search) === 0) {
             throw BlueshiftValidationException::invalidCustomerIdentifier();
@@ -166,14 +169,17 @@ class Customer extends Blueshift implements BlueshiftCustomer
         ?bool $unsubscribedSms = null
     ): array {
         $states = [];
-        if ($unsubscribedEmail !== null)
+        if ($unsubscribedEmail !== null) {
             $states['unsubscribed'] = $unsubscribedEmail;
+        }
 
-        if ($unsubscribedPush !== null)
+        if ($unsubscribedPush !== null) {
             $states['unsubscribed_push'] = $unsubscribedPush;
+        }
 
-        if ($unsubscribedSms !== null)
+        if ($unsubscribedSms !== null) {
             $states['unsubscribed_sms'] = $unsubscribedSms;
+        }
 
         if (empty($states)) {
             throw BlueshiftValidationException::subscriptionStateRequired();
