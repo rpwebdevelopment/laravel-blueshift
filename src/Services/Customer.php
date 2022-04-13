@@ -46,7 +46,7 @@ class Customer extends Blueshift implements BlueshiftCustomer
 
     public function bulkCreateArray(array $customers): ?string
     {
-        $json = json_encode(['customers' => $customers]);
+        $json = json_encode(['customers' => array_values($customers)], JSON_THROW_ON_ERROR);
 
         return $this->bulkCreateJson($json);
     }
