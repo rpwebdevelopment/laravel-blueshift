@@ -16,11 +16,10 @@ use Rpwebdevelopment\LaravelBlueshift\Services\UserList;
 
 class BlueshiftServiceProvider extends ServiceProvider
 {
-    public function register(): void
-    {
-        $this->app->singleton(BlueshiftCustomer::class, Customer::class);
-        $this->app->singleton(BlueshiftCatalog::class, Catalog::class);
-        $this->app->singleton(BlueshiftUserList::class, UserList::class);
-        $this->app->singleton(BlueshiftEvent::class, Event::class);
-    }
+    public array $singletons = [
+        BlueshiftCustomer::class => Customer::class,
+        BlueshiftCatalog::class => Catalog::class,
+        BlueshiftUserList::class => UserList::class,
+        BlueshiftEvent::class => Event::class,
+    ];
 }
