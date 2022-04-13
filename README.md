@@ -22,10 +22,19 @@ composer require rpwebdevelopment/laravel-blueshift
 
 ## Usage
 
-laravel-package accepts 2 .env constants for configuration:
+### Configuration
+Before the library can function, it expects the blueshift configuration to be provided
+This package provides a base version of the configuration which you can install by running
+```bash
+php artisan vendor:publish --tag=blueshift-config
+```
 
-* `BLUESHIFT_API_KEY` - This sould be the "Users Api Key" provided by Blueshift
+The Base configuration pulls values from the environment (env) to populate the configuration.
+* `BLUESHIFT_API_KEY` - This should be the "Users Api Key" provided by Blueshift
 * `BLUESHIFT_BASE_URL` - Defaults to 'https://api.eu.getblueshift.com', for non EU this should be set to 'https://api.getblueshift.com'
+
+
+### Class Structure
 
 laravel-blueshift provides specific classes for handling different API endpoints, the available classes and their methods are as follows:
 
