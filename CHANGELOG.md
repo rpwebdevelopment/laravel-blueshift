@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-blueshift` will be documented in this file.
 
+## v0.1.3 - 2022-04-13
+
+- improved handling of bulk data
+
 ## v0.1.2 - 2022-04-07
 
 - improved user subscription handling
